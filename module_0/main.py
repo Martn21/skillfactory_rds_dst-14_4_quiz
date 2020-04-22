@@ -1,26 +1,22 @@
-print("Hello world")
-# skillfactory_rds_dst-14_4_quiz
-#Угадай число
 import numpy as np
-count = 0                            # счетчик попыток
-number = np.random.randint(1,101)    # загадали число
 print ("Загадано число от 1 до 100")
-
-#=======================================================
-def game_core_v2(number):
-    '''Сначала устанавливаем любое random число, а потом уменьшаем или увеличиваем его в зависимости от того, больше оно или меньше нужного.
+def game_core_v3(number):
+    '''Делим  всегда интервал пополам. Начинаем с середины
        Функция принимает загаданное число и возвращает число попыток'''
     count = 1
-    predict = np.random.randint(1,101)
+    pred_low = 1 # нижняя граница
+    pred_high = 101  # верхняя граница (с учетом округления в меньшую сторону)
+    predict = int((pred_high-pred_low)/2)
     while number != predict:
         count+=1
         if number > predict: 
-            predict += 1
-        elif number < predict: 
-            predict -= 1
+            pred_low = predict
+            predict = int((pred_high-pred_low)/2 + pred_low)
+        elif number < predict:
+            pred_high = predict
+            predict = int((pred_high-pred_low)/2 + pred_low)
     return(count) # выход из цикла, если угадали
-
-        
+       
         
 def score_game(game_core):
     '''Запускаем игру 1000 раз, чтобы узнать, как быстро игра угадывает число'''
@@ -33,5 +29,6 @@ def score_game(game_core):
     print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
     return(score)
 
-# запускаем
-score_game(game_core_v2)
+
+# Проверяем
+score_game(game_core_v3)
